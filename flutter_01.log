@@ -1,0 +1,90 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter run
+
+## exception
+
+SocketException: SocketException: Write failed (OS Error: Broken pipe, errno = 32), port = 0
+
+```
+#0      _NativeSocket.write (dart:io-patch/socket_patch.dart:1223:34)
+#1      _RawSocket.write (dart:io-patch/socket_patch.dart:1966:15)
+#2      _Socket._write (dart:io-patch/socket_patch.dart:2413:18)
+#3      _SocketStreamConsumer.write (dart:io-patch/socket_patch.dart:2156:26)
+#4      _SocketStreamConsumer.addStream.<anonymous closure> (dart:io-patch/socket_patch.dart:2130:11)
+#5      _rootRunUnary (dart:async/zone.dart:1407:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:1308:19)
+#7      _CustomZone.runUnaryGuarded (dart:async/zone.dart:1217:7)
+#8      _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:339:11)
+#9      _BufferingStreamSubscription._add (dart:async/stream_impl.dart:271:7)
+#10     _SyncStreamControllerDispatch._sendData (dart:async/stream_controller.dart:776:19)
+#11     _StreamController._add (dart:async/stream_controller.dart:650:7)
+#12     _StreamController.add (dart:async/stream_controller.dart:598:5)
+#13     _StreamSinkImpl.add (dart:io/io_sink.dart:138:17)
+#14     _IOSinkImpl.write (dart:io/io_sink.dart:271:5)
+#15     _IOSinkImpl.writeln (dart:io/io_sink.dart:291:5)
+#16     _Socket.writeln (dart:io-patch/socket_patch.dart:2248:45)
+#17     _StdSink.writeln (dart:io/stdio.dart:342:11)
+#18     DefaultResidentCompiler.accept (package:flutter_tools/src/compile.dart:936:22)
+#19     HotRunner._restartFromSources (package:flutter_tools/src/run_hot.dart:594:27)
+<asynchronous suspension>
+#20     HotRunner._fullRestartHelper (package:flutter_tools/src/run_hot.dart:790:16)
+<asynchronous suspension>
+#21     HotRunner.restart (package:flutter_tools/src/run_hot.dart:730:38)
+<asynchronous suspension>
+#22     TerminalHandler._commonTerminalInputHandler (package:flutter_tools/src/resident_runner.dart:1781:40)
+<asynchronous suspension>
+#23     TerminalHandler.processTerminalInput (package:flutter_tools/src/resident_runner.dart:1821:7)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[32m[✓][39m Flutter (Channel stable, 3.10.5, on Ubuntu 20.04.5 LTS 5.15.0-84-generic, locale en_US.UTF-8)
+    [32m•[39m Flutter version 3.10.5 on channel stable at /home/narayan/dev/flutter
+    [32m•[39m Upstream repository https://github.com/flutter/flutter.git
+    [32m•[39m Framework revision 796c8ef792 (4 months ago), 2023-06-13 15:51:02 -0700
+    [32m•[39m Engine revision 45f6e00911
+    [32m•[39m Dart version 3.0.5
+    [32m•[39m DevTools version 2.23.1
+
+[32m[✓][39m Android toolchain - develop for Android devices (Android SDK version 33.0.0)
+    [32m•[39m Android SDK at /home/narayan/Android/Sdk
+    [32m•[39m Platform android-33, build-tools 33.0.0
+    [32m•[39m Java binary at: /snap/android-studio/126/android-studio/jbr/bin/java
+    [32m•[39m Java version OpenJDK Runtime Environment (build 17.0.6+0-17.0.6b802.4-9586694)
+    [32m•[39m All Android licenses accepted.
+
+[32m[✓][39m Chrome - develop for the web
+    [32m•[39m Chrome at google-chrome
+
+[32m[✓][39m Linux toolchain - develop for Linux desktop
+    [32m•[39m clang version 10.0.0-4ubuntu1
+    [32m•[39m cmake version 3.16.3
+    [32m•[39m ninja version 1.10.0
+    [32m•[39m pkg-config version 0.29.1
+
+[32m[✓][39m Android Studio (version 2022.2)
+    [32m•[39m Android Studio at /snap/android-studio/126/android-studio
+    [32m•[39m Flutter plugin version 74.0.2
+    [32m•[39m Dart plugin version 222.4582
+    [32m•[39m Java version OpenJDK Runtime Environment (build 17.0.6+0-17.0.6b802.4-9586694)
+
+[32m[✓][39m VS Code (version 1.82.2)
+    [32m•[39m VS Code at /usr/share/code
+    [32m•[39m Flutter extension version 3.74.0
+
+[32m[✓][39m Connected device (3 available)
+    [32m•[39m SM A207F (mobile) • R9EN4002MCJ • android-arm64  • Android 11 (API 30)
+    [32m•[39m Linux (desktop)   • linux       • linux-x64      • Ubuntu 20.04.5 LTS 5.15.0-84-generic
+    [32m•[39m Chrome (web)      • chrome      • web-javascript • Google Chrome 116.0.5845.96
+
+[32m[✓][39m Network resources
+    [32m•[39m All expected network resources are available.
+
+[32m•[39m No issues found!
+```

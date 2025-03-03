@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "736993341390",
+    "project_id": "the-installers-app",
+    "storage_bucket": "the-installers-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736993341390:android:470cc5480862d2a537059f",
+        "android_client_info": {
+          "package_name": "com.theinstallers.theinstallers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1NhNYXAl35kA8sgV1v-nQniEKWHVMP2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
