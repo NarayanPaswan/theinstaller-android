@@ -27,8 +27,7 @@ class _BookingDetailsViewForAgentState
     extends State<BookingDetailsViewForAgent> {
   final bookingController = BookingControllerProvider();
   final intallerController = AgentControllerProvider();
-   List<VideoPlayerController> _videoControllers = [];
-
+  List<VideoPlayerController> _videoControllers = [];
 
   String roleId = '';
   // Add a boolean flag to control the visibility of "Calling..." text
@@ -37,7 +36,7 @@ class _BookingDetailsViewForAgentState
 
   @override
   void dispose() {
-     for (var controller in _videoControllers) {
+    for (var controller in _videoControllers) {
       controller.dispose();
     }
     callTimer?.cancel();
@@ -58,9 +57,6 @@ class _BookingDetailsViewForAgentState
       this.roleId = roleId;
     });
   }
-
-   
-  
 
   @override
   Widget build(BuildContext context) {
@@ -95,15 +91,16 @@ class _BookingDetailsViewForAgentState
                   );
                 }
                 var item = snapshot.data!.items!.first;
-                  // Initialize video controllers
-              if (_videoControllers.isEmpty) {
-                for (var video in item.serviceVideoData ?? []) {
-                  _videoControllers.add(VideoPlayerController.network(AppUrl.videoUrl + video.videoFile!)
-                    ..initialize().then((_) {
-                      setState(() {});
-                    }));
+                // Initialize video controllers
+                if (_videoControllers.isEmpty) {
+                  for (var video in item.serviceVideoData ?? []) {
+                    _videoControllers.add(VideoPlayerController.network(
+                        AppUrl.videoUrl + video.videoFile!)
+                      ..initialize().then((_) {
+                        setState(() {});
+                      }));
+                  }
                 }
-              }
                 return Column(
                   children: [
                     Padding(
@@ -277,9 +274,7 @@ class _BookingDetailsViewForAgentState
                                                     .width -
                                                 100,
                                             child: Row(
-                                              
                                               children: [
-                                                
                                                 const Icon(
                                                   Icons
                                                       .mobile_screen_share_outlined,
@@ -303,72 +298,12 @@ class _BookingDetailsViewForAgentState
                                                   ),
                                                 ),
 
-                                           if ( snapshot.data?.items?.first.messageNintyOneStatus
-                                    == 'active' )
-                                                //try calling start
-                                                callingInProgress
-                                                    ? Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          Text(
-                                                            "Calling...",
-                                                            style: AppTextStyle
-                                                                .callNow,
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ],
-                                                      )
-                                                    : GestureDetector(
-                                                        onTap: () async {
-                                                          try {
-                                                            setState(() {
-                                                              callingInProgress =
-                                                                  true; // Set flag to true when calling starts
-                                                            });
-
-                                                            // Start the timer for 15 seconds
-                                                            callTimer = Timer(
-                                                                const Duration(
-                                                                    seconds:
-                                                                        20),
-                                                                () {
-                                                              setState(() {
-                                                                callingInProgress =
-                                                                    false; // Set flag to false when timer expires
-                                                              });
-                                                            });
-                                                            await intallerController
-                                                                .installerCallingTheCustomer(
-                                                              installerNo:
-                                                                  await DatabaseControllerProvider()
-                                                                      .getInstallerMobileNo(),
-                                                              customerNo: snapshot
-                                                                      .data
-                                                                      ?.items
-                                                                      ?.first
-                                                                      .clientMobileNumber ??
-                                                                  '',
-                                                              onSuccess: () {},
-                                                            );
-                                                          } catch (e) {
-                                                            AppErrorSnackBar(
-                                                                    context)
-                                                                .error(e);
-                                                            setState(() {
-                                                              callingInProgress =
-                                                                  false; // Set flag to false if there's an error
-                                                            });
-                                                          }
-                                                        },
-                                                        child: Row(
+                                                if (snapshot.data?.items?.first
+                                                        .messageNintyOneStatus ==
+                                                    'active')
+                                                  //try calling start
+                                                  callingInProgress
+                                                      ? Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .spaceBetween,
@@ -377,7 +312,7 @@ class _BookingDetailsViewForAgentState
                                                                   .end,
                                                           children: [
                                                             Text(
-                                                              "Call Now",
+                                                              "Calling...",
                                                               style:
                                                                   AppTextStyle
                                                                       .callNow,
@@ -386,30 +321,52 @@ class _BookingDetailsViewForAgentState
                                                                   TextOverflow
                                                                       .ellipsis,
                                                             ),
-                                                            const SizedBox(
-                                                              height: 23,
-                                                              width: 23,
-                                                              child: Image(
-                                                                  image: AssetImage(
-                                                                      'assets/images/call.png')),
-                                                            ),
                                                           ],
-                                                        ),
-                                                      ),
-                                                  //try end
-                                                if ( snapshot.data?.items?.first.messageNintyOneStatus == 'inactive' )
-                                                   GestureDetector(
-                                                     onTap: () async {
-                                                     String clientMobileNumber = snapshot.data?.items?.first.clientMobileNumber.toString() ?? '';
+                                                        )
+                                                      : GestureDetector(
+                                                          onTap: () async {
+                                                            try {
+                                                              setState(() {
+                                                                callingInProgress =
+                                                                    true; // Set flag to true when calling starts
+                                                              });
 
-                                                      String telurl = 'tel:${clientMobileNumber}';
-                                                      if (await canLaunchUrlString(telurl)) {
-                                                        launchUrlString(telurl);
-                                                      } else {
-                                                        print("can't launch $telurl");
-                                                      }
-                                                     },
-                                                     child: Row(
+                                                              // Start the timer for 15 seconds
+                                                              callTimer = Timer(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          20),
+                                                                  () {
+                                                                setState(() {
+                                                                  callingInProgress =
+                                                                      false; // Set flag to false when timer expires
+                                                                });
+                                                              });
+                                                              await intallerController
+                                                                  .installerCallingTheCustomer(
+                                                                installerNo:
+                                                                    await DatabaseControllerProvider()
+                                                                        .getInstallerMobileNo(),
+                                                                customerNo: snapshot
+                                                                        .data
+                                                                        ?.items
+                                                                        ?.first
+                                                                        .clientMobileNumber ??
+                                                                    '',
+                                                                onSuccess:
+                                                                    () {},
+                                                              );
+                                                            } catch (e) {
+                                                              AppErrorSnackBar(
+                                                                      context)
+                                                                  .error(e);
+                                                              setState(() {
+                                                                callingInProgress =
+                                                                    false; // Set flag to false if there's an error
+                                                              });
+                                                            }
+                                                          },
+                                                          child: Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
@@ -436,8 +393,59 @@ class _BookingDetailsViewForAgentState
                                                               ),
                                                             ],
                                                           ),
-                                                   ),
+                                                        ),
+                                                //try end
+                                                if (snapshot.data?.items?.first
+                                                        .messageNintyOneStatus ==
+                                                    'inactive')
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      String
+                                                          clientMobileNumber =
+                                                          snapshot
+                                                                  .data
+                                                                  ?.items
+                                                                  ?.first
+                                                                  .clientMobileNumber
+                                                                  .toString() ??
+                                                              '';
 
+                                                      String telurl =
+                                                          'tel:${clientMobileNumber}';
+                                                      if (await canLaunchUrlString(
+                                                          telurl)) {
+                                                        launchUrlString(telurl);
+                                                      } else {
+                                                        print(
+                                                            "can't launch $telurl");
+                                                      }
+                                                    },
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        Text(
+                                                          "Call Now",
+                                                          style: AppTextStyle
+                                                              .callNow,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 23,
+                                                          width: 23,
+                                                          child: Image(
+                                                              image: AssetImage(
+                                                                  'assets/images/call.png')),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                               ],
                                             ),
                                           ),
@@ -501,8 +509,10 @@ class _BookingDetailsViewForAgentState
                                     label: const Text('Get Directions'),
                                     style: ElevatedButton.styleFrom(
                                       // Customize the button style, if needed
-                                      primary: Colors.blue, // Button color
-                                      onPrimary: Colors.white, // Text color
+                                      backgroundColor:
+                                          Colors.blue, // Button color
+                                      foregroundColor:
+                                          Colors.white, // Text color
                                     ),
                                   ),
                                 ),
@@ -600,29 +610,32 @@ class _BookingDetailsViewForAgentState
                                   ),
                                 ],
                               ),
-                              if(snapshot.data?.items?.first.descriptions != null)
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              if(snapshot.data?.items?.first.descriptions != null)
-                              Row(
-                                children: [
-                                  Text(
-                                    "Rec Reason:",
-                                    style: AppTextStyle.veryGoodDetail,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      snapshot.data?.items?.first.descriptions ??
-                                          '',
-                                      style: AppTextStyle.tasktype,
+                              if (snapshot.data?.items?.first.descriptions !=
+                                  null)
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              if (snapshot.data?.items?.first.descriptions !=
+                                  null)
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Rec Reason:",
+                                      style: AppTextStyle.veryGoodDetail,
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        snapshot.data?.items?.first
+                                                .descriptions ??
+                                            '',
+                                        style: AppTextStyle.tasktype,
+                                      ),
+                                    ),
+                                  ],
+                                ),
 
                               const SizedBox(
                                 height: 10,
@@ -865,82 +878,92 @@ class _BookingDetailsViewForAgentState
                     /* Booking Image end */
 
                     // Booking Video start
-                  if ((snapshot.data?.items?.first.serviceVideoData?.length ?? 0) > 0)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Card(
-                        elevation: 3.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Videos: ",
-                                style: AppTextStyle.veryGoodDetail,
-                              ),
-                              const SizedBox(height: 5),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: snapshot.data?.items?.first.serviceVideoData?.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  final videoController = _videoControllers[index];
-                                  final uploadedServiceVideo = snapshot.data?.items?.first.serviceVideoData?[index];
-                                  return Column(
-                                    children: [
-                                      if (videoController.value.isInitialized)
-                                        AspectRatio(
-                                          aspectRatio: videoController.value.aspectRatio,
-                                          child: VideoPlayer(videoController),
-                                        ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                videoController.value.isPlaying
-                                                    ? videoController.pause()
-                                                    : videoController.play();
-                                              });
-                                            },
-                                            icon: Icon(
-                                              videoController.value.isPlaying
-                                                  ? Icons.pause
-                                                  : Icons.play_arrow,
-                                            ),
+                    if ((snapshot.data?.items?.first.serviceVideoData?.length ??
+                            0) >
+                        0)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Card(
+                          elevation: 3.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Videos: ",
+                                  style: AppTextStyle.veryGoodDetail,
+                                ),
+                                const SizedBox(height: 5),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: snapshot.data?.items?.first
+                                          .serviceVideoData?.length ??
+                                      0,
+                                  itemBuilder: (context, index) {
+                                    final videoController =
+                                        _videoControllers[index];
+                                    final uploadedServiceVideo = snapshot.data
+                                        ?.items?.first.serviceVideoData?[index];
+                                    return Column(
+                                      children: [
+                                        if (videoController.value.isInitialized)
+                                          AspectRatio(
+                                            aspectRatio: videoController
+                                                .value.aspectRatio,
+                                            child: VideoPlayer(videoController),
                                           ),
-                                         IconButton(
-                                                          onPressed: () {
-                                                            
-                                                            showDialog(
-                                                              context: context,
-                                                              builder: (context) => DownloadVideoProgressDialog(
-                                                                  videoUrl: AppUrl
-                                                                          .videoUrl +
-                                                                      uploadedServiceVideo!.videoFile.toString(),
-                                                                      ),
-                                                            );
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.download,
-                                                            color: Colors.green,
-                                                          ),
-                                                        ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  videoController
+                                                          .value.isPlaying
+                                                      ? videoController.pause()
+                                                      : videoController.play();
+                                                });
+                                              },
+                                              icon: Icon(
+                                                videoController.value.isPlaying
+                                                    ? Icons.pause
+                                                    : Icons.play_arrow,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      DownloadVideoProgressDialog(
+                                                    videoUrl: AppUrl.videoUrl +
+                                                        uploadedServiceVideo!
+                                                            .videoFile
+                                                            .toString(),
+                                                  ),
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                Icons.download,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  // Booking video end
+                    // Booking video end
 
                     /* Accept Decline Button start */
 
@@ -990,8 +1013,10 @@ class _BookingDetailsViewForAgentState
                                         child: Text("Reject"),
                                         style: ElevatedButton.styleFrom(
                                           // Customize the button style, if needed
-                                          primary: Colors.red, // Button color
-                                          onPrimary: Colors.white, // Text color
+                                          backgroundColor:
+                                              Colors.red, // Button color
+                                          foregroundColor:
+                                              Colors.white, // Text color
                                         ),
                                       ),
                                     ),
@@ -1022,8 +1047,10 @@ class _BookingDetailsViewForAgentState
                                         child: Text("Accept"),
                                         style: ElevatedButton.styleFrom(
                                           // Customize the button style, if needed
-                                          primary: Colors.green, // Button color
-                                          onPrimary: Colors.white, // Text color
+                                          backgroundColor:
+                                              Colors.green, // Button color
+                                          foregroundColor:
+                                              Colors.white, // Text color
                                         ),
                                       ),
                                     ),
@@ -1060,8 +1087,10 @@ class _BookingDetailsViewForAgentState
                                       child: Text("Accepted"),
                                       style: ElevatedButton.styleFrom(
                                         // Customize the button style, if needed
-                                        primary: Colors.green, // Button color
-                                        onPrimary: Colors.white, // Text color
+                                        backgroundColor:
+                                            Colors.green, // Button color
+                                        foregroundColor:
+                                            Colors.white, // Text color
                                       ),
                                     ),
                                   ],

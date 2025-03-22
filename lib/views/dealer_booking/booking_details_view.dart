@@ -29,20 +29,20 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
   void initState() {
     print('Your service id: ${widget.serviceId}');
     print('Your service code is: ${widget.serviceCode}');
-  _fetchRoleId();
+    _fetchRoleId();
     super.initState();
   }
 
-    Future<void> _fetchRoleId() async {
-  String roleId = await DatabaseControllerProvider().getRoleId();
-  setState(() {
-    this.roleId = roleId;
-  });
+  Future<void> _fetchRoleId() async {
+    String roleId = await DatabaseControllerProvider().getRoleId();
+    setState(() {
+      this.roleId = roleId;
+    });
   }
 
   List<VideoPlayerController> _videoControllers = [];
 
-    @override
+  @override
   void dispose() {
     super.dispose();
     for (var controller in _videoControllers) {
@@ -63,7 +63,6 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
         ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
-        
       ),
       body: SingleChildScrollView(
         child: FutureBuilder(
@@ -83,17 +82,18 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                     child: Text("Service detail not available !"),
                   );
                 }
-                 var item = snapshot.data!.items!.first;
+                var item = snapshot.data!.items!.first;
 
-                   // Initialize video controllers
-              if (_videoControllers.isEmpty) {
-                for (var video in item.serviceVideoData ?? []) {
-                  _videoControllers.add(VideoPlayerController.network(AppUrl.videoUrl + video.videoFile!)
-                    ..initialize().then((_) {
-                      setState(() {});
-                    }));
+                // Initialize video controllers
+                if (_videoControllers.isEmpty) {
+                  for (var video in item.serviceVideoData ?? []) {
+                    _videoControllers.add(VideoPlayerController.network(
+                        AppUrl.videoUrl + video.videoFile!)
+                      ..initialize().then((_) {
+                        setState(() {});
+                      }));
+                  }
                 }
-              }
 
                 return Column(
                   children: [
@@ -228,7 +228,6 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                                                               ?.first
                                                               .clientEmailAddress ??
                                                           '',
-                                                     
                                                       style: AppTextStyle
                                                           .customerNameDetail,
                                                       maxLines: 1,
@@ -275,55 +274,66 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                                         ],
                                       ),
                                     ),
-                                  ], 
+                                  ],
                                 ),
-     
-                              Padding(
-                                padding: const EdgeInsets.only(left: 13.0, right: 8.0, bottom: 8.0),
-                                child: Text(
-                                  "${snapshot.data?.items?.first.address ?? ''} ${'. '} ${snapshot.data?.items?.first.landmark ?? ''}",
-                                  style: AppTextStyle.customerNameDetail,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 13.0, right: 8.0, bottom: 8.0),
+                                  child: Text(
+                                    "${snapshot.data?.items?.first.address ?? ''} ${'. '} ${snapshot.data?.items?.first.landmark ?? ''}",
+                                    style: AppTextStyle.customerNameDetail,
+                                  ),
                                 ),
-                              ),
-
                                 Center(
                                   child: ElevatedButton.icon(
-                                  onPressed: () async {
-                                      String address = snapshot.data?.items?.first.address ?? '';
-                                  
-                                  try {
-                                    List<Location> locations = await locationFromAddress(address);
-                                    
-                                    if (locations.isNotEmpty) {
-                                      String latitude = locations.first.latitude.toString();
-                                      String longitude = locations.first.longitude.toString();
+                                    onPressed: () async {
+                                      String address =
+                                          snapshot.data?.items?.first.address ??
+                                              '';
 
-                                      String label = 'Client Address';
-                                      int zoomLevel = 35;
-                                      String mapUrl = 'https://www.google.com/maps?q=$latitude,$longitude&z=$zoomLevel($label)';
+                                      try {
+                                        List<Location> locations =
+                                            await locationFromAddress(address);
 
-                                      if (await canLaunchUrlString(mapUrl)) {
-                                        await launchUrlString(mapUrl);
-                                      } else {
-                                        print("Can't launch $mapUrl");
+                                        if (locations.isNotEmpty) {
+                                          String latitude = locations
+                                              .first.latitude
+                                              .toString();
+                                          String longitude = locations
+                                              .first.longitude
+                                              .toString();
+
+                                          String label = 'Client Address';
+                                          int zoomLevel = 35;
+                                          String mapUrl =
+                                              'https://www.google.com/maps?q=$latitude,$longitude&z=$zoomLevel($label)';
+
+                                          if (await canLaunchUrlString(
+                                              mapUrl)) {
+                                            await launchUrlString(mapUrl);
+                                          } else {
+                                            print("Can't launch $mapUrl");
+                                          }
+                                        } else {
+                                          print(
+                                              "Could not find coordinates for the given address");
+                                        }
+                                      } catch (e) {
+                                        print(
+                                            "Error converting address to coordinates: $e");
                                       }
-                                    } else {
-                                      print("Could not find coordinates for the given address");
-                                    }
-                                  } catch (e) {
-                                    print("Error converting address to coordinates: $e");
-                                  }
-                                  },
-                                  icon: const Icon(Icons.directions),
-                                  label: const Text('Get Directions'),
-                                  style: ElevatedButton.styleFrom(
-                                    // Customize the button style, if needed
-                                    primary: Colors.blue, // Button color
-                                    onPrimary: Colors.white, // Text color
+                                    },
+                                    icon: const Icon(Icons.directions),
+                                    label: const Text('Get Directions'),
+                                    style: ElevatedButton.styleFrom(
+                                      // Customize the button style, if needed
+                                      backgroundColor:
+                                          Colors.blue, // Button color
+                                      foregroundColor:
+                                          Colors.white, // Text color
+                                    ),
                                   ),
-                                                                ),
-                                ),     
-
+                                ),
                               ],
                             ),
                           ),
@@ -372,7 +382,7 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                                             child: Row(
                                               children: [
                                                 Text(
-                                                 Labels.postedBy,
+                                                  Labels.postedBy,
                                                   style: AppTextStyle
                                                       .veryGoodDetail,
                                                 ),
@@ -399,7 +409,6 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                                           children: [
                                             Text(
                                               Labels.bookingDate,
-                                              
                                               style:
                                                   AppTextStyle.veryGoodDetail,
                                             ),
@@ -436,8 +445,9 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                                 style: AppTextStyle.veryGoodDetail,
                               ),
                               Text(
-                            
-                                snapshot.data?.items?.first.typeOfProduct?.productList ?? '',     
+                                snapshot.data?.items?.first.typeOfProduct
+                                        ?.productList ??
+                                    '',
                                 style: AppTextStyle.customerNameDetail,
                               ),
                               // ----------sub prodduct try start-----
@@ -448,15 +458,20 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                                 Labels.subProductType,
                                 style: AppTextStyle.veryGoodDetail,
                               ),
-                            if (item.subProducts != null && item.subProducts!.isNotEmpty)
-                    ...item.subProducts!.map((subProduct) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2.0),
-                          child: Text(
-                            '${subProduct.subProductList}',
-                            style: AppTextStyle.customerNameDetail,
-                          ),
-                        )).toList(),
-                              
+                              if (item.subProducts != null &&
+                                  item.subProducts!.isNotEmpty)
+                                ...item.subProducts!
+                                    .map((subProduct) => Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2.0),
+                                          child: Text(
+                                            '${subProduct.subProductList}',
+                                            style:
+                                                AppTextStyle.customerNameDetail,
+                                          ),
+                                        ))
+                                    .toList(),
+
                               // ----------sub prodduct try end-----
                               const SizedBox(
                                 height: 10,
@@ -465,7 +480,7 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                                 Labels.typeOfMaterial,
                                 style: AppTextStyle.veryGoodDetail,
                               ),
-                                const SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
@@ -478,8 +493,7 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                                 style: AppTextStyle.veryGoodDetail,
                               ),
                               Text(
-                                snapshot.data?.items?.first.quantity ??
-                                    '',
+                                snapshot.data?.items?.first.quantity ?? '',
                                 style: AppTextStyle.customerNameDetail,
                               ),
                               const SizedBox(height: 15),
@@ -490,30 +504,29 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              if(roleId != '3')
-                              Row(
-                                children: [
-                                  Text(
-                                    Labels.paymentModes,
-                                    style: AppTextStyle.veryGoodDetail,
-                                  ),
-                                  Text(
-                                    snapshot.data?.items?.first.paymentMode
-                                            ?.paymentMethodName ??
-                                        '',
-                                    style: AppTextStyle.customerNameDetail,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                              if(roleId != '3')
-                              const SizedBox(
-                                height: 10,
-                              ),
+                              if (roleId != '3')
+                                Row(
+                                  children: [
+                                    Text(
+                                      Labels.paymentModes,
+                                      style: AppTextStyle.veryGoodDetail,
+                                    ),
+                                    Text(
+                                      snapshot.data?.items?.first.paymentMode
+                                              ?.paymentMethodName ??
+                                          '',
+                                      style: AppTextStyle.customerNameDetail,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              if (roleId != '3')
+                                const SizedBox(
+                                  height: 10,
+                                ),
                               Text(
-                                
-                                 Labels.remark,
+                                Labels.remark,
                                 style: AppTextStyle.veryGoodDetail,
                               ),
                               Text(
@@ -537,197 +550,197 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                       ),
                     ),
 
-                     /* Booking Image start */
-                     if ((snapshot.data?.items?.first.serviceImageData?.length ?? 0) > 0)
-
-                       Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Card(
-                                      elevation: 3.0,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                         
-                                            Text(
-                                              "Images: ",
-                                              style:
-                                                  AppTextStyle.veryGoodDetail,
-                                            ),
-                                            // Display form images for this agent update
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount:snapshot.data?.items?.first.serviceImageData?.length ?? 0,
-                                              itemBuilder: (context, index) {
-                                                final uploadedServiceImage = snapshot.data?.items?.first.serviceImageData?[index];
-                                                return Column(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 8.0,
-                                                              bottom: 8.0),
-                                                      child: SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height /
-                                                            3,
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        child: GestureDetector(
-                                                           onTap: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              FullScreenWidget(
-                                                            disposeLevel:
-                                                                DisposeLevel
-                                                                    .High,
-                                                            child:
-                                                                Image.network(
-                                                              AppUrl.imageUrl +
-                                                                  uploadedServiceImage!.imageFile.toString(),
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                          child: Image.network(
-                                                            AppUrl.imageUrl +
-                                                                uploadedServiceImage!.imageFile.toString(),
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
+                    /* Booking Image start */
+                    if ((snapshot.data?.items?.first.serviceImageData?.length ??
+                            0) >
+                        0)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Card(
+                          elevation: 3.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Images: ",
+                                  style: AppTextStyle.veryGoodDetail,
+                                ),
+                                // Display form images for this agent update
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: snapshot.data?.items?.first
+                                          .serviceImageData?.length ??
+                                      0,
+                                  itemBuilder: (context, index) {
+                                    final uploadedServiceImage = snapshot.data
+                                        ?.items?.first.serviceImageData?[index];
+                                    return Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 8.0, bottom: 8.0),
+                                          child: SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                3,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FullScreenWidget(
+                                                      disposeLevel:
+                                                          DisposeLevel.High,
+                                                      child: Image.network(
+                                                        AppUrl.imageUrl +
+                                                            uploadedServiceImage!
+                                                                .imageFile
+                                                                .toString(),
+                                                        fit: BoxFit.contain,
                                                       ),
                                                     ),
-                                                   
-                                                    
-                                                     IconButton(
-                                                          onPressed: () {
-                                                            
-                                                            showDialog(
-                                                              context: context,
-                                                              builder: (context) => DownloadProgressDialog(
-                                                                  imageUrl: AppUrl
-                                                                          .imageUrl +
-                                                                      uploadedServiceImage!.imageFile.toString(),
-                                                                      ),
-                                                            );
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.download,
-                                                            color: Colors.green,
-                                                          ),
-                                                        ),
-                                                    
-                                                  ],
+                                                  ),
                                                 );
                                               },
-                                            ),
-                                            
-
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                    
-                     /* Booking Image end */
-
-                       // Booking Video start
-                  if ((snapshot.data?.items?.first.serviceVideoData?.length ?? 0) > 0)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Card(
-                        elevation: 3.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Videos: ",
-                                style: AppTextStyle.veryGoodDetail,
-                              ),
-                              const SizedBox(height: 5),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: snapshot.data?.items?.first.serviceVideoData?.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  final videoController = _videoControllers[index];
-                                  final uploadedServiceVideo = snapshot.data?.items?.first.serviceVideoData?[index];
-                                  return Column(
-                                    children: [
-                                      if (videoController.value.isInitialized)
-                                        AspectRatio(
-                                          aspectRatio: videoController.value.aspectRatio,
-                                          child: VideoPlayer(videoController),
-                                        ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                videoController.value.isPlaying
-                                                    ? videoController.pause()
-                                                    : videoController.play();
-                                              });
-                                            },
-                                            icon: Icon(
-                                              videoController.value.isPlaying
-                                                  ? Icons.pause
-                                                  : Icons.play_arrow,
+                                              child: Image.network(
+                                                AppUrl.imageUrl +
+                                                    uploadedServiceImage!
+                                                        .imageFile
+                                                        .toString(),
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
-                                         IconButton(
-                                                          onPressed: () {
-                                                            
-                                                            showDialog(
-                                                              context: context,
-                                                              builder: (context) => DownloadVideoProgressDialog(
-                                                                  videoUrl: AppUrl
-                                                                          .videoUrl +
-                                                                      uploadedServiceVideo!.videoFile.toString(),
-                                                                      ),
-                                                            );
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.download,
-                                                            color: Colors.green,
-                                                          ),
-                                                        ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  DownloadProgressDialog(
+                                                imageUrl: AppUrl.imageUrl +
+                                                    uploadedServiceImage!
+                                                        .imageFile
+                                                        .toString(),
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.download,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  // Booking video end
-                     
+
+                    /* Booking Image end */
+
+                    // Booking Video start
+                    if ((snapshot.data?.items?.first.serviceVideoData?.length ??
+                            0) >
+                        0)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Card(
+                          elevation: 3.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Videos: ",
+                                  style: AppTextStyle.veryGoodDetail,
+                                ),
+                                const SizedBox(height: 5),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: snapshot.data?.items?.first
+                                          .serviceVideoData?.length ??
+                                      0,
+                                  itemBuilder: (context, index) {
+                                    final videoController =
+                                        _videoControllers[index];
+                                    final uploadedServiceVideo = snapshot.data
+                                        ?.items?.first.serviceVideoData?[index];
+                                    return Column(
+                                      children: [
+                                        if (videoController.value.isInitialized)
+                                          AspectRatio(
+                                            aspectRatio: videoController
+                                                .value.aspectRatio,
+                                            child: VideoPlayer(videoController),
+                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  videoController
+                                                          .value.isPlaying
+                                                      ? videoController.pause()
+                                                      : videoController.play();
+                                                });
+                                              },
+                                              icon: Icon(
+                                                videoController.value.isPlaying
+                                                    ? Icons.pause
+                                                    : Icons.play_arrow,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      DownloadVideoProgressDialog(
+                                                    videoUrl: AppUrl.videoUrl +
+                                                        uploadedServiceVideo!
+                                                            .videoFile
+                                                            .toString(),
+                                                  ),
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                Icons.download,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    // Booking video end
                   ],
                 );
               }
